@@ -1,1 +1,2 @@
-## Go Library for interacting with data from [Trailforks](https://www.trailforks.com/)
+# gotrailforks
+Go library for interacting with data from [Trailforks](https://www.trailforks.com/)
