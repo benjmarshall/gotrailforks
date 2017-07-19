@@ -284,13 +284,13 @@ func (t TrailData) SortBy(s SortType) TrailData {
 	case RatingSort:
 		tFiltered.df = tFiltered.df.Arrange(dataframe.RevSort("rating"))
 	case RankSort:
-		tFiltered.df = tFiltered.df.Arrange(dataframe.RevSort("rank"))
+		tFiltered.df = tFiltered.df.Arrange(dataframe.RevSort("global_rank"))
 	case DistanceSort:
 		tFiltered.df = tFiltered.df.Arrange(dataframe.RevSort("distance"))
 	case DifficultySort:
 		tFiltered.df = tFiltered.df.Arrange(dataframe.Sort("difficulty"))
 	case NameSort:
-		tFiltered.df = tFiltered.df.Arrange(dataframe.RevSort("title"))
+		tFiltered.df = tFiltered.df.Arrange(dataframe.Sort("title"))
 	case CustomRankSort:
 		tFiltered.df = tFiltered.df.Arrange(dataframe.RevSort("customrank"))
 	default:
@@ -322,6 +322,9 @@ func (t TrailData) Locations() ([]string, error) {
 	// Loop over locations, generating a list of unique entries
 	var uniqueLocSlice []string
 	for _, l := range locSlice {
+		if l == "" {
+			continue
+		}
 		if !stringSliceContains(uniqueLocSlice, l) {
 			uniqueLocSlice = append(uniqueLocSlice, l)
 		}
@@ -332,6 +335,16 @@ func (t TrailData) Locations() ([]string, error) {
 // Names returns the names of the columns in the trail data struct
 func (t TrailData) Names() []string {
 	return t.df.Names()
+}
+
+// Trails returns the names of the trails in the trail data struct
+func (t TrailData) Trails() ([]string, error) {
+	// Pull title column
+	titleCol := t.df.Col("title")
+	if titleCol.Err != nil {
+		return []string{}, titleCol.Err
+	}
+	return titleCol.Records(), nil
 }
 
 // String implements the Stringer interface for TrailData
