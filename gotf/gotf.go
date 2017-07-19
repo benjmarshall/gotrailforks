@@ -87,7 +87,7 @@ func (t *TrailData) parseDistances() {
 			distanceParsed = "0"
 			// Catch km values
 		} else if strings.Contains(distance, "km") {
-			distanceParsed = strings.TrimSpace(strings.Replace(strings.Replace(distance, "km", "", 1), ".", "", 1))
+			distanceParsed = strings.TrimSpace(strings.Replace(strings.Replace(distance, "km", "", 1), ".", "", 1)) + "00"
 		} else {
 			distanceParsed = strings.TrimSpace(strings.Replace(strings.Replace(distance, "m", "", 1), ",", "", 1))
 		}
